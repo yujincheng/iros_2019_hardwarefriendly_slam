@@ -20,14 +20,41 @@
   journal = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops}, 
   year = {2018}
 }
-@article{Kendall:20150d9, 
-  title = {{PoseNet: A Convolutional Network for Real-Time 6-DOF Camera Relocalization}}, 
-  author = {Kendall, Alex and Grimes, Matthew and Cipolla, Roberto}, 
-  journal = {2015 IEEE International Conference on Computer Vision (ICCV)}, 
-  abstract = {We present a robust and real-time monocular six degree of freedom relocalization system. Our system trains a convolutional neural network to regress the 6-DOF camera pose from a single RGB image in an end-to-end manner with no need of additional engineering or graph optimisation. The algorithm can operate indoors and outdoors in real time, taking 5ms per frame to compute. It obtains approximately 2m and 3° accuracy for large scale outdoor scenes and 0.5m and 5° accuracy indoors. This is achieved using an efficient 23 layer deep convnet, demonstrating that convnets can be used to solve complicated out of image plane regression problems. This was made possible by leveraging transfer learning from large scale classification data. We show that the PoseNet localizes from high level features and is robust to difficult lighting, motion blur and different camera intrinsics where point based SIFT registration fails. Furthermore we show how the pose feature that is produced generalizes to other scenes allowing us to regress pose with only a few dozen training examples.}, 
-  pages = {2938--2946}, 
-  doi = {10.1109/iccv.2015.336}, 
-  year = {2015}
+@article{Sarlin:20187ab, 
+  title = {{Leveraging Deep Visual Descriptors for Hierarchical Efficient Localization}}, 
+  author = {Sarlin, Paul-Edouard and Debraine, Frédéric and Dymczyk, Marcin and Siegwart, Roland and Cadena, Cesar}, 
+  journal = {arXiv preprint arXiv:1809.01019}, 
+  abstract = {Many robotics applications require precise pose estimates despite operating in large and changing environments. This can be addressed by visual localization, using a pre-computed 3D model of the surroundings. The pose estimation then amounts to finding correspondences between 2D keypoints in a query image and 3D points in the model using local descriptors. However, computational power is often limited on robotic platforms, making this task challenging in large-scale environments. Binary feature descriptors significantly speed up this 2D-3D matching, and have become popular in the robotics community, but also strongly impair the robustness to perceptual aliasing and changes in viewpoint, illumination and scene structure. In this work, we propose to leverage recent advances in deep learning to perform an efficient hierarchical localization. We first localize at the map level using learned image-wide global descriptors, and subsequently estimate a precise pose from 2D-3D matches computed in the candidate places only. This restricts the local search and thus allows to efficiently exploit powerful non-binary descriptors usually dismissed on resource-constrained devices. Our approach results in state-of-the-art localization performance while running in real-time on a popular mobile platform, enabling new prospects for robotics research.}, 
+  arxiv = {1809.01019}, 
+  year = {2018}
+}
+@article{Brahmbhatt:2018c15, 
+  title = {{Geometry-Aware Learning of Maps for Camera Localization}}, 
+  author = {Brahmbhatt, Samarth and Gu, Jinwei and Kim, Kihwan and Hays, James and Kautz, Jan}, 
+  journal = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition}, 
+  year = {2018}
+}
+@article{Cieslewski:20187ee, 
+  title = {{Data-Efficient Decentralized Visual SLAM}}, 
+  author = {Cieslewski, Titus and Choudhary, Siddharth and Scaramuzza, Davide}, 
+  journal = {2018 IEEE International Conference on Robotics and Automation (ICRA)}, 
+  abstract = {Decentralized visual simultaneous localization and mapping (SLAM) is a powerful tool for multi-robot applications in environments where absolute positioning is not available. Being visual, it relies on cheap, lightweight and versatile cameras, and, being decentralized, it does not rely on communication to a central entity. In this work, we integrate state-of-the-art decentralized SLAM components into a new, complete decentralized visual SLAM system. To allow for data association and optimization, existing decentralized visual SLAM systems exchange the full map data among all robots, incurring large data transfers at a complexity that scales quadratically with the robot count. In contrast, our method performs efficient data association in two stages: first, a compact full-image descriptor is deterministically sent to only one robot. Then, only if the first stage succeeded, the data required for relative pose estimation is sent, again to only one robot. Thus, data association scales linearly with the robot count and uses highly compact place representations. For optimization, a state-of-the-art decentralized pose-graph optimization method is used. It exchanges a minimum amount of data which is linear with trajectory overlap. We characterize the resulting system and identify bottlenecks in its components. The system is evaluated on publicly available datasets and we provide open access to the code. Supplementary Material Data and code are at: https://github.com/uzh-rpg/dslam\_open}, 
+  pages = {2466--2473}, 
+  eissn = {2577-087X}, 
+  doi = {10.1109/icra.2018.8461155}, 
+  year = {2018}
+}
+@article{Golodetz:20184b8, 
+  title = {{Collaborative Large-Scale Dense 3D Reconstruction with Online Inter-Agent Pose Optimisation}}, 
+  author = {Golodetz, Stuart and Cavallari, Tommaso and Lord, Nicholas A. and Prisacariu, Victor A. and Murray, David W. and Torr, Philip H. S.}, 
+  journal = {IEEE Transactions on Visualization and Computer Graphics}, 
+  abstract = {Reconstructing dense, volumetric models of real-world 3D scenes is important for many tasks, but capturing large scenes can take significant time, and the risk of transient changes to the scene goes up as the capture time increases. These are good reasons to want instead to capture several smaller sub-scenes that can be joined to make the whole scene. Achieving this has traditionally been difficult: joining sub-scenes that may never have been viewed from the same angle requires a high-quality camera relocaliser that can cope with novel poses, and tracking drift in each sub-scene can prevent them from being joined to make a consistent overall scene. Recent advances, however, have significantly improved our ability to capture medium-sized sub-scenes with little to no tracking drift: real-time globally consistent reconstruction systems can close loops and re-integrate the scene surface on the fly, whilst new visual-inertial odometry approaches can significantly reduce tracking drift during live reconstruction. Moreover, high-quality regression forest-based relocalisers have recently been made more practical by the introduction of a method to allow them to be trained and used online. In this paper, we leverage these advances to present what to our knowledge is the first system to allow multiple users to collaborate interactively to reconstruct dense, voxel-based models of whole buildings using only consumer-grade hardware, a task that has traditionally been both time-consuming and dependent on the availability of specialised hardware. Using our system, an entire house or lab can be reconstructed in under half an hour and at a far lower cost than was previously possible.}, 
+  volume = {24}, 
+  pages = {2895--2905}, 
+  issn = {1077-2626}, 
+  eissn = {1077-2626}, 
+  doi = {10.1109/tvcg.2018.2868533}, 
+  year = {2018}
 }
 @article{Arandjelovic:2017997, 
   title = {{NetVLAD: CNN Architecture for Weakly Supervised Place Recognition}}, 
@@ -58,12 +85,6 @@
   volume = {4}, 
   year = {2017}
 }
-@article{Brahmbhatt:2018c15, 
-  title = {{Geometry-Aware Learning of Maps for Camera Localization}}, 
-  author = {Brahmbhatt, Samarth and Gu, Jinwei and Kim, Kihwan and Hays, James and Kautz, Jan}, 
-  journal = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition}, 
-  year = {2018}
-}
 @article{Cieslewski:2017c2d, 
   title = {{Efficient decentralized visual place recognition from full-image descriptors}}, 
   author = {Cieslewski, Titus and Scaramuzza, Davide}, 
@@ -86,28 +107,6 @@
   doi = {10.1177/0278364917732640}, 
   year = {2017}
 }
-@article{Cieslewski:2018a74, 
-  title = {{Data-Efficient Decentralized Visual SLAM}}, 
-  author = {Cieslewski, Titus and Choudhary, Siddharth and Scaramuzza, Davide}, 
-  journal = {2018 IEEE International Conference on Robotics and Automation (ICRA)}, 
-  abstract = {Decentralized visual simultaneous localization and mapping (SLAM) is a powerful tool for multi-robot applications in environments where absolute positioning is not available. Being visual, it relies on cheap, lightweight and versatile cameras, and, being decentralized, it does not rely on communication to a central entity. In this work, we integrate state-of-the-art decentralized SLAM components into a new, complete decentralized visual SLAM system. To allow for data association and optimization, existing decentralized visual SLAM systems exchange the full map data among all robots, incurring large data transfers at a complexity that scales quadratically with the robot count. In contrast, our method performs efficient data association in two stages: first, a compact full-image descriptor is deterministically sent to only one robot. Then, only if the first stage succeeded, the data required for relative pose estimation is sent, again to only one robot. Thus, data association scales linearly with the robot count and uses highly compact place representations. For optimization, a state-of-the-art decentralized pose-graph optimization method is used. It exchanges a minimum amount of data which is linear with trajectory overlap. We characterize the resulting system and identify bottlenecks in its components. The system is evaluated on publicly available datasets and we provide open access to the code. Supplementary Material Data and code are at: https://github.com/uzh-rpg/dslam\_open}, 
-  pages = {2466--2473}, 
-  eissn = {2577-087X}, 
-  doi = {10.1109/icra.2018.8461155}, 
-  year = {2018}
-}
-@article{Golodetz:20184b8, 
-  title = {{Collaborative Large-Scale Dense 3D Reconstruction with Online Inter-Agent Pose Optimisation}}, 
-  author = {Golodetz, Stuart and Cavallari, Tommaso and Lord, Nicholas A. and Prisacariu, Victor A. and Murray, David W. and Torr, Philip H. S.}, 
-  journal = {IEEE Transactions on Visualization and Computer Graphics}, 
-  abstract = {Reconstructing dense, volumetric models of real-world 3D scenes is important for many tasks, but capturing large scenes can take significant time, and the risk of transient changes to the scene goes up as the capture time increases. These are good reasons to want instead to capture several smaller sub-scenes that can be joined to make the whole scene. Achieving this has traditionally been difficult: joining sub-scenes that may never have been viewed from the same angle requires a high-quality camera relocaliser that can cope with novel poses, and tracking drift in each sub-scene can prevent them from being joined to make a consistent overall scene. Recent advances, however, have significantly improved our ability to capture medium-sized sub-scenes with little to no tracking drift: real-time globally consistent reconstruction systems can close loops and re-integrate the scene surface on the fly, whilst new visual-inertial odometry approaches can significantly reduce tracking drift during live reconstruction. Moreover, high-quality regression forest-based relocalisers have recently been made more practical by the introduction of a method to allow them to be trained and used online. In this paper, we leverage these advances to present what to our knowledge is the first system to allow multiple users to collaborate interactively to reconstruct dense, voxel-based models of whole buildings using only consumer-grade hardware, a task that has traditionally been both time-consuming and dependent on the availability of specialised hardware. Using our system, an entire house or lab can be reconstructed in under half an hour and at a far lower cost than was previously possible.}, 
-  volume = {24}, 
-  pages = {2895--2905}, 
-  issn = {1077-2626}, 
-  eissn = {1077-2626}, 
-  doi = {10.1109/tvcg.2018.2868533}, 
-  year = {2018}
-}
 @article{Egodagamage:2017e3f, 
   title = {{A Collaborative Augmented Reality Framework Based on Distributed Visual Slam}}, 
   author = {Egodagamage, Ruwan and Tuceryan, Mihran}, 
@@ -116,4 +115,13 @@
   pages = {25--32}, 
   doi = {10.1109/cw.2017.47}, 
   year = {2017}
+}
+@article{Kendall:20150d9, 
+  title = {{PoseNet: A Convolutional Network for Real-Time 6-DOF Camera Relocalization}}, 
+  author = {Kendall, Alex and Grimes, Matthew and Cipolla, Roberto}, 
+  journal = {2015 IEEE International Conference on Computer Vision (ICCV)}, 
+  abstract = {We present a robust and real-time monocular six degree of freedom relocalization system. Our system trains a convolutional neural network to regress the 6-DOF camera pose from a single RGB image in an end-to-end manner with no need of additional engineering or graph optimisation. The algorithm can operate indoors and outdoors in real time, taking 5ms per frame to compute. It obtains approximately 2m and 3° accuracy for large scale outdoor scenes and 0.5m and 5° accuracy indoors. This is achieved using an efficient 23 layer deep convnet, demonstrating that convnets can be used to solve complicated out of image plane regression problems. This was made possible by leveraging transfer learning from large scale classification data. We show that the PoseNet localizes from high level features and is robust to difficult lighting, motion blur and different camera intrinsics where point based SIFT registration fails. Furthermore we show how the pose feature that is produced generalizes to other scenes allowing us to regress pose with only a few dozen training examples.}, 
+  pages = {2938--2946}, 
+  doi = {10.1109/iccv.2015.336}, 
+  year = {2015}
 }

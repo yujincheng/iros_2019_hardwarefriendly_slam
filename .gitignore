@@ -23,5 +23,6 @@
 *.zip 
 *.rpi 
 *.pdf
+*.fls
 *.fdb_latexmk
 fig/*.pdf

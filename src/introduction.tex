@@ -1,3 +1,20 @@
 \label{sec:introdutction}
+In recent years, with the development of the hardware and algorithms, the capabilities of a single agent have been greatly improved.
+To futher expand the capabilities of intelligent robots, using several robots can accelerate many tasks, such as localization, exploration and mapping.
+As simultaneous localization and mapping(SLAM) is an essential component in many tasks, it is important to do SLAM across different robots in many multi-agent applications. 
+The camera is a widely used snesor in SLAM for its rich information and low cost. 
+However, in many scenarios, communication is limited, so that there is no a server or a agent can stably collect all of the visual data from each robot.
 
-In \cite{Cieslewski:2018a74}, Cieslewski propose a data efficient.
+Therefore, to reduce computational requirements, the previous work \cite{Cieslewski:20187ee} proposes a data-efficient decentralized SLAM(DSLAM) system and makes improvements in three typical components in DSLAM system:
+\begin{itemize}
+\item Using ORB-SLAM \cite{orbslam} in stereo configuration as the visual odometry algorithm which provides basic intra-robot position estimation.
+\item Using NetVLAD \cite{Arandjelovic:2017997} algorithm to do place recognition which relates the current observation to previous scenes and other robots.
+\item Using distributed Gauss-Seidel algorithm \cite{parallel_distributed} as the optimization back-end which optimizes the intra-robot position and fuses the inter-robot locations and maps.
+\end{itemize}
+
+Both ORB-SLAM and NetVLAD require tremendous computation and storage resources, and thus, the deployment of DSLAM on embedded system is challaged by the limited resources and power supply.
+
+The NetVLAD algorithm based on VGG-16 model \cite{vgg16} consumes more than 80G operations for a single $300 \times 300$ input image. Each operation means a addition or a multiplication. It is very challaging to deploy the NetVLAD on a tranditional embedded hardware platform. 
+As to ORB-SLAM, the algorithm need to calculate the feature point and corresponding descriptors for each frame from camera.
+
+To make the DSLAM system more energy efficient and hardware friendly, we propose a novel hardware-software codesign DSLAM framework with 
