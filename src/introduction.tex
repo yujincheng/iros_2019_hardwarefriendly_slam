@@ -14,7 +14,13 @@ Therefore, to reduce computational requirements, the previous work \cite{Cieslew
 
 Both ORB-SLAM and NetVLAD require tremendous computation and storage resources, and thus, the deployment of DSLAM on embedded system is challaged by the limited resources and power supply.
 
-The NetVLAD algorithm based on VGG-16 model \cite{vgg16} consumes more than 80G operations for a single $300 \times 300$ input image. Each operation means a addition or a multiplication. It is very challaging to deploy the NetVLAD on a tranditional embedded hardware platform. 
-As to ORB-SLAM, the algorithm need to calculate the feature point and corresponding descriptors for each frame from camera.
+NetVLAD is a  .The NetVLAD algorithm based on VGG-16 model \cite{vgg16} consumes more than 80G operations for a single $300 \times 300$ input image. Each operation means a addition or a multiplication. It is very challaging to deploy the NetVLAD on a tranditional embedded hardware platform. 
+As to ORB-SLAM, the algorithm needs to calculate the feature point and the corresponding descriptors for each frame from camera.
 
-To make the DSLAM system more energy efficient and hardware friendly, we propose a novel hardware-software codesign DSLAM framework with 
+With the development of FPGA, some previous work accelerate ORM-SLAM or CNN by designing specific hardware architecture. %这里需要增加一段，讲一讲ORB要多么占资源。
+
+To make the DSLAM system more energy efficient and hardware friendly, we propose a novel hardware-software codesign DSLAM framework with following contributions:
+\begin{itemize}
+\item We implement NetVLAD on an embedded SoC platform with CPU cores and FPGA fabric.
+\item We use a end-to-end CNN based method to estimate the 6-DoF pose between intra-robot successive frames and matched scenes between different robots.
+\end{itemize}
