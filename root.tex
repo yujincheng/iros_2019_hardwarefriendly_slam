@@ -22,6 +22,13 @@
 % See the \addtolength command later in the file to balance the column lengths
 % on the last page of the document
 
+\usepackage{cleveref}
+\crefname{figure}{fig}{figs}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{threeparttable}
+\usepackage{subfigure}
+
 % The following packages can be found on http:\\www.ctan.org
 %\usepackage{graphics} % for pdf, bitmapped graphics files
 %\usepackage{epsfig} % for postscript graphics files
@@ -60,6 +67,9 @@ Data-Efficient and Hardware  Decentralized Visual {SLAM}
 
 \section{Introduction}
 \input{src/introduction.tex}
+
+\section{Background}
+\input{src/background.tex}
 
 \section{Conclusion}
 \input{src/conclusion.tex}
