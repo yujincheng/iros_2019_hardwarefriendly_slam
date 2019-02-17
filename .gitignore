@@ -26,3 +26,4 @@
 *.fls
 *.fdb_latexmk
 fig/*.pdf
+!/root.pdf
