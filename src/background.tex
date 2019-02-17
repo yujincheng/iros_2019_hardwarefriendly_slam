@@ -4,6 +4,7 @@ As described before, there are two essential components on each agent: 1) Visual
 
 \subsection{Hardware architecture of Zync SoC}
 The Xilinx Zync Soc is a chip with ARM cores and FPGA fabric. The system is illustrated in \cref{fig:plps}. The ARM cores with an embedded Linux operation system are called Processing System (PS). The FPGA fabric is called Programmable Logic (PL). The peripherals like camera and communication unit (WiFi or others) are accessable with PS. The high-bandwidth on-chip AXI interface is used to communicate between PS and PL. PS and PL can also share the DDR to transfer large volume of data such as each frame of camera.
+Deephi CNN accelerator \cite{deephi} is one of the state-of-the-art accelerators and is famous for high energy efficiency on various of CNN structure. We deploy the accelerator on the PL side of Zynq SoC.
 
 \begin{figure}[thb]  
     \centering  
