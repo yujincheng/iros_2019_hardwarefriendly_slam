@@ -12,8 +12,8 @@ The goal of place recognition is to calculate a given frame into a limited set o
 
 Recent advances in the deep learning and the convolution neural network (CNN) enable powerful end-to-end mode for place recognition \cite{Noh:2017d0b,Arandjelovic:2017997}, and the NetVLAD method is one of the most accurate method based on CNN. The NetVLAD algorithm based on VGG-16 model \cite{Simonyan:20143be} consumes more than $80G$ operations for a single $300 \times 300$ input image (each operation means an addition or a multiplication). It is very challaging to deploy the NetVLAD on a tranditional embedded hardware platform.
 
-\subsection{Hardware architecture of Zync SoC}
-The Xilinx Zync Soc is a chip with ARM cores and FPGA fabric. The system is illustrated in \cref{fig:plps}. The ARM cores with an embedded Linux operation system are called Processing System (PS). The FPGA fabric is called Programmable Logic (PL). The peripherals like camera and communication unit (WiFi or others) are accessable with PS. The high-bandwidth on-chip AXI interface is used to communicate between PS and PL. PS and PL can also share the DDR to transfer large volume of data such as each frame of camera.
+\subsection{Hardware architecture of Zync MPSoC}
+The Xilinx Zync MPSoC is a chip with ARM cores and FPGA fabric. The system is illustrated in \cref{fig:plps}. The ARM cores with an embedded Linux operation system are called Processing System (PS). The FPGA fabric is called Programmable Logic (PL). The peripherals like camera and communication unit (WiFi or others) are accessable with PS. The high-bandwidth on-chip AXI interface is used to communicate between PS and PL. PS and PL can also share the DDR to transfer large volume of data such as each frame of camera.
 Deephi CNN accelerator \cite{Tech:2019360} is one of the state-of-the-art accelerators and is famous for high energy efficiency on various of CNN structure. We deploy the accelerator on the PL side of Zynq SoC.
 
 \begin{figure}[thb]  
@@ -23,3 +23,7 @@ Deephi CNN accelerator \cite{Tech:2019360} is one of the state-of-the-art accele
 \end{figure}
 
 Though FPGA can greatly improve the performance and energy efficiency of CNN inference, FPGA cannot efficiently calculate float-point number and requires fixed-point parameters and intermediate data in CNN.
+
+\subsection{Motivation}
+Though previous work \cite{Cieslewski:20187ee} proposes data-efficient DSLAM system, it is difficult to implement the two essential components, VO and place recognition smultaneously on a communication-limited and energy-constrained embedded hardware platform on a real rebot. We propose this hardware-software co-design DSLAM system to use Xilinx Zynq MPSoC and Deephi accelerator to execute these two components on real system.
+
