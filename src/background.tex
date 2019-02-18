@@ -4,7 +4,7 @@ As described before, there are two essential components on each agent: 1) Visual
 
 \subsubsection{Visual Odometry (VO)}
 
-
+Visual odometry estimation is the task to infer ego-motion from a sequence of images, and is an essential component in SLAM system. Some feature-based SLAM systems have enjoyed great success, like ORB-SLAM\cite{DBLP:journals/trob/Mur-ArtalMT15} and ORB-SLAM2\cite{Mur-Artal:2017281}. Recently, several studies have shown that these feature-based SLAM systems require high computing resources. Fang et al.\cite{Fang2017FPGAbasedOF} shows that the feature extraction stage is the most computation-intensive, consuming over 50\% of the CPU resources. As FPGA is one of the most promising platforms as accelerator, the SLAM system on FPGAs has become a hot research topic. However, FPGA-accelerated feature extraction still consumes a lot of time and computing resources, which cannot be deployed simultaneously with an FPGA-accelerated neural network.
 
 \subsubsection{Place Recognition}
 
