@@ -22,8 +22,6 @@
 % See the \addtolength command later in the file to balance the column lengths
 % on the last page of the document
 
-\usepackage{cleveref}
-\crefname{figure}{fig}{figs}
 \usepackage{epsfig}
 \usepackage{float}
 \usepackage{threeparttable}
@@ -35,8 +33,11 @@
 %\usepackage{epsfig} % for postscript graphics files
 %\usepackage{mathptmx} % assumes new font selection scheme installed
 %\usepackage{times} % assumes new font selection scheme installed
-%\usepackage{amsmath} % assumes amsmath package installed
-%\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+
+\usepackage{cleveref}
+\crefname{figure}{fig}{figs}
 
 \title{\LARGE \bf
 Data-Efficient and Hardware  Decentralized Visual {SLAM}
