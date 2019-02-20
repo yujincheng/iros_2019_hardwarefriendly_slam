@@ -1,9 +1,9 @@
 \label{sec:experiment}
-The speed the accuracy of our proposed hardware-software co-design DSLAM will be evaluated in this section.
+The speed and the accuracy of our proposed hardware-software co-design DSLAM will be evaluated in this section.
 
 \subsection{Run-Time}
 
-We evaluate our DSLAM on two intelligent cars which are controled by the Deephi Aristotle board with a ZU9 MPSOC. The intelligent car and the board is illustrated in \cref{fig:env}. \Cref{tab:time} shows the run time of each part of our DSLAM system. The pipeline of scheduling of these parts is shown in \cref{sec:background}.
+We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi Aristotle board with a ZU9 MPSOC. The intelligent car and the board is illustrated in \cref{fig:env}. \Cref{tab:time} shows the run time of each part of our DSLAM system. The pipeline of scheduling of these parts is shown in \cref{sec:background}.
 
 
 \begin{figure}[t]
@@ -40,15 +40,15 @@ We evaluate our DSLAM on two intelligent cars which are controled by the Deephi 
     
   \end{table}%
 
-Substituting the run-time of each part into \cref{equ:pipline1,equ:pipline2,equ:pipline3}. We find out that the run-time of NetVLAD on PS ($T_{3}$) becomes the bottleneck of the system and \cref{equ:pipline3} constrains the NetVLAD frequency ($N$) to $8$.
+Substituting the run-time of each part into \cref{equ:pipeline1,equ:pipeline2,equ:pipeline3}. We find out that the run-time of NetVLAD on PS ($T_{3}$) becomes the bottleneck of the system and \cref{equ:pipeline3} constrains the NetVLAD frequency ($N$) to $8$.
 
 We calculate the relative 6-D pose between every two successive frames and the NetVLAD code every $8$ frames in the following experiments.
 
 \subsection{VO with DPU}
 
-We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 video sequences with stereo pairs, with original iamge size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate dose \cite{Zhan:2018e92}.
+We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate dose \cite{Zhan:2018e92}.
 
-At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the trainning set. The trainning  super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
+At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training  super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
 
 
 \begin{table}[ht]
@@ -59,7 +59,7 @@ At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 a
 \begin{tabular}{|c|c|c|c|}
   \hline
   \multirow{2}[2]{*}{method} & \multirow{2}[2]{*}{$t_{err}$} & \multirow{2}[2]{*}{$r_{err}$} & run time  \bigstrut[t]\\
-        &       &       & (ms/frame) \bigstrut[b]\\
+        &       &       & $(ms/frame)$ \bigstrut[b]\\
   \hline
   ORB-SLAM  &       &       &  \bigstrut\\
   \hline
@@ -76,7 +76,7 @@ At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 a
     \label{tab:VO}%
   \end{table}%
 
-We evaluate the VO on the sub-sequences at lenth of 500 and report the average translational and rotational errors for the testing sequence 00 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
+  We evaluate the VO on the sub-sequences at length of ??? and report the average translational and rotational errors for the testing sequence 00 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
 
 
 \begin{figure}[t]
@@ -87,12 +87,12 @@ We evaluate the VO on the sub-sequences at lenth of 500 and report the average t
 \end{figure}
 
 
-Because of the fixed-point number used in our design, which sacrifice the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281,Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource constrained embedded platform.
+Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
 
 \subsection{NetVLAD with DPU}
 
 We evaluate the NetVLAD performance on the loop close dataset for KITTI\cite{KITTIGroundTruth}.
-The dataset labels the ground truth of loop closure for these sequences based on the metric positions of each images. Specifically, it compares the position of each image to the others in the sequence and regard the one as a loop if it lies within a radius of $6m$.
+The dataset labels the ground truth of loop closure for these sequences based on the metric positions of each image. Specifically, it compares the position of each image to the others in the sequence and regards the one as a loop if it lies within a radius of $6m$.
 
 The precision-recall curves of the original NetVLAD with an output of 4096 dimensions (Blue), fixed-point NetVLAD 4096-D output (Green), original NetVLAD with 128-D output (Red), and fixed-point NetVLAD 128-D output (Yellow) are shown in \cref{fig:reloc}. We use sequence 00 as the test sequence.
 
@@ -104,15 +104,15 @@ The precision-recall curves of the original NetVLAD with an output of 4096 dimen
   \label{fig:reloc}
 \end{figure}
 
-Our NetVLAD with DPU performs similarly to the original NetVLAD with the same output dimension but runs much faster with the help of the acceleration techniques on FPGA and architecture design. Even if there are sightly accuracy reduction on the ROC curves. The following experiment shows that the slightly drawback would not make the overall DSLAM performance decline.
+Our NetVLAD with DPU performs similarly to the original NetVLAD with the same output dimension but runs much faster with the help of the acceleration techniques on FPGA and architecture design. Even if there are sightly accuracy reduction on the ROC curves, the following experiment shows that the slight drawback would not make the overall DSLAM performance decline.
 
 \subsection{DSLAM Evaluation}
 
-With the help of our hardware-software co-design VO and place recognition compoments on embedded system, we can build up the DSLAM system like the previous work \cite{Cieslewski:20187ee}. However, unlike the feature point based method in previous \cite{Cieslewski:20187ee}, our approach dose not necessarily compute the feature point for each frame. The previous work \cite{Cieslewski:20187ee} transfers the ORB feature points among agnets to do inter-robot pose estimation and trajectory merging.
+With the help of our hardware-software co-design VO and place recognition components on the embedded system, we can build up the DSLAM system like the previous work \cite{Cieslewski:20187ee}. However, unlike the feature point based method in previous \cite{Cieslewski:20187ee}, our approach does not necessarily compute the feature point for each frame. The previous work \cite{Cieslewski:20187ee} transfers the ORB feature points among agents to do inter-robot pose estimation and trajectory merging.
 
 %讲下更具体的实验设计
 
-A possible way to solve the inter-robot pose estimation is to calculate the feature points and  descriptors of the corresponding robot and frames when the inter-robot loop closure occurs. However, on one hand, the tranditional feature point detection and description method cannot get the absolute scale from a single image. On the other hand, it is resource consuming to do feature point algorithms like SIFT\cite{Jegou:2010f45} and ORB\cite{Mur-Artal:2017281}. The agents may stop and solve the feature points. We directly tranform the down-sampled $608 \times 160$ image among the agents, and use the same method as the proposed VO with DPU to do the inter-robot pose estimation. The result of the merged trajectory is illustrated in \cref{fig:dslam}.
+A possible way to solve the inter-robot pose estimation is to calculate the feature points and descriptors of the corresponding robot and frames when the inter-robot loop closure occurs. However, on the one hand, the traditional feature point detection and description method cannot get the absolute scale from a single image. On the other hand, it is resource consuming to do feature point algorithms like SIFT\cite{Jegou:2010f45} and ORB\cite{Mur-Artal:2017281}. The agents may stop and solve the feature points. We directly transfer the down-sampled $608 \times 160$ image among the agents and use the same method as the proposed VO with DPU to do the inter-robot pose estimation. The result of the merged trajectory is illustrated in \cref{fig:dslam}.
 
 
 \begin{figure}[ht]
@@ -129,9 +129,9 @@ A possible way to solve the inter-robot pose estimation is to calculate the feat
   \label{fig:data}
 \end{figure}
 
-There are three kinds of data need to be transfers among the agents and the server: 1) the VO results of each frame (VO), 2) the NetVLAD results of every 8 frames(NetVLAD), 3) the iamge need for inter-robot relative pose estimation (RelPose).
+There are three kinds of data need to be transferred among the agents and the server: $1)$ the VO results of each frame (VO), $2)$ the NetVLAD results of every $8$ frames (NetVLAD), $3)$ the image need for inter-robot relative pose estimation (RelPose).
 
-At the begining of the task. There is no inter-robot loop closure detected, so there is no data traffic for RelPose. When inter-robot loop closure occurs, the data traffic for RelPose increases rapidly. The previous work\cite{Cieslewski:20187ee} also faces this problem though it use feature point for inter-robot relative pose estimation.
+At the beginning of the task, there is no inter-robot loop closure detected, so there is no data traffic for RelPose. When inter-robot loop closure occurs, the data traffic for RelPose increases rapidly. The previous work\cite{Cieslewski:20187ee} also faces this problem though it uses feature point for inter-robot relative pose estimation.
 
 
-The total communication traffic of the propsoed DSLAM system on KITTI 00 is increasing with time, and is shown in \cref{fig:data}.
+The total communication traffic of the proposed DSLAM system on KITTI 00 is increasing with time and is shown in \cref{fig:data}.

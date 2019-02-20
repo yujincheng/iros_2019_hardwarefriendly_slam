@@ -1,7 +1,7 @@
-Decentralized simultaneous localization and mapping (DSLAM) is essential to a multi-robot system, especially in environments lacking absolute positioning equipments like GPS.
-Visual based SLAM is a widely adopted solution in industry for its low cost and high flexibility.
-There are two essential components need to be efficiently deplyed on each agent: 1) Visual Odometry(VO) and 2) Place Recognition. However, both of these components require intensive computation and storage on embedded system.
+Decentralized simultaneous localization and mapping (DSLAM) is essential to a multi-robot system, especially in environments lacking absolute positioning equipment like GPS.
+Monocular visual-based SLAM is a widely adopted solution in the industry for its low cost and high flexibility.
+Two essential components need to be efficiently deployed on each agent: 1) Visual Odometry(VO) and 2) Place Recognition. However, both of these components require intensive computation and storage on the embedded system.
 The place recognition task is usually done with CNN based methods. We adopt CNN as the VO to provide 6-D pose between different frames, for both intra-robot or inter-robot. Thus we can use the CNN accelerator based on FPGA to execute these two components.
-In this work, we propose a hardware-software co-design DSLAM framwork and use embedded FPGA to accelerator these two components.
+In this work, we propose a hardware-software co-design DSLAM framework and use embedded FPGA to accelerator these two components.
 
-We evaluate our framework on the hardware platform Xilinx ZU9 SoC and we can perform DSLAM in real time on each agent. We also evaluate our system on publicly  available dataset.
+We evaluate our framework on the hardware platform Xilinx ZU9 SoC, and we can perform DSLAM in real time on each agent. We also evaluate our system on the publicly available dataset.
