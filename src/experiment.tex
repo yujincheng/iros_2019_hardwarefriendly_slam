@@ -46,31 +46,31 @@ We calculate the relative 6-D pose between every two successive frames and the N
 
 \subsection{VO with DPU}
 
-We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate dose \cite{Zhan:2018e92}.
+We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate does \cite{Zhan:2018e92}.
 
-At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training  super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
-
+% FIXME: 下面给了09和10的结果，这里finetune使用的数据集是不是需要修改一下
+At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
 
 \begin{table}[ht]
     \centering
-    \caption{???Visual odometry (VO) result}
+    \caption{Visual odometry (VO) results on test sequences (09, 10)}
     \footnotesize
     \begin{threeparttable}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c||cc|cc|c|}
   \hline
-  \multirow{2}[2]{*}{method} & \multirow{2}[2]{*}{$t_{err}$} & \multirow{2}[2]{*}{$r_{err}$} & run time  \bigstrut[t]\\
-        &       &       & $(ms/frame)$ \bigstrut[b]\\
+  \multirow{2}[2]{*}{method} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
+                             & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
   \hline
-  ORB-SLAM  &       &       &  \bigstrut\\
+  ORB-SLAM  &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
   \hline
-  Depth-VO-Feat &       &       &  \bigstrut\\
+  Ours(float)  &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
   \hline
-  Ours  &       &       & 12 \bigstrut\\
+  Ours(fixed)  &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
   \hline
-  \end{tabular}%
+  \end{tabular}
   
   \begin{tablenotes}
-        \item[*] $t_{err}$ is the average translational drift error. $r_{err}$ is average rotational drift error.
+        \item[*] $t_{err}(\%)$ is the average translational drift error. $r_{err}({}^{\circ}/100m)$ is average rotational drift error.
         \end{tablenotes}
       \end{threeparttable}
     \label{tab:VO}%
@@ -79,12 +79,13 @@ At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 a
   We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
 
 
-\begin{figure}[t]
+  \begin{figure}[t]
     \centering  
-    \includegraphics[width=0.75\linewidth]{fig/VO.eps}
-    \caption{???Trajectory of different VO methods on sequence 00.}
+    \subfigure[Traj. on Seq. 09] {\includegraphics[height=0.9\linewidth]{fig/sequence_09.eps}} 
+    \subfigure[Traj. on Seq. 10] {\includegraphics[height=0.9\linewidth]{fig/sequence_10.eps}} 
+    \caption{Qualitative evaluation of odometry on the KITTI Odometry test sequences (09, 10).}
     \label{fig:VO}
-\end{figure}
+  \end{figure}
 
 
 Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
