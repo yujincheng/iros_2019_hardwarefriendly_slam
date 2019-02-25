@@ -76,7 +76,7 @@ At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 a
     \label{tab:VO}%
   \end{table}%
 
-  We evaluate the VO on the sub-sequences at length of ??? and report the average translational and rotational errors for the testing sequence 00 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
+  We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
 
 
 \begin{figure}[t]
@@ -99,7 +99,7 @@ The precision-recall curves of the original NetVLAD with an output of 4096 dimen
 
 \begin{figure}[t]
   \centering  
-  \includegraphics[width=0.85\linewidth]{fig/val_reloc.eps}
+  \includegraphics[width=0.5\linewidth]{fig/val_reloc.eps}
   \caption{ROC curves on sequence 00.}
   \label{fig:reloc}
 \end{figure}
