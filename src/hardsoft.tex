@@ -1,9 +1,9 @@
 \label{sec:hardsoft}
-Our hardware-software co-design DSLAM system contains two essential improvements in the pose estimation and place recognition tasks. As illustrate in \cref{fig:all_us}, both of these two components are divided into two stages: $1)$ CNN front end to extract features which is deployed to the DPU on PL and $2)$ geometric operations to present final results which are deployed on the PS ARM cores. To make full use of the Zynq MPSoC, we optimize the data follow for both of these components.
+Our hardware-software co-design DSLAM system contains two essential improvements in the pose estimation and place recognition tasks. As illustrate in \cref{fig:all_us}, both of these two components are divided into two stages: $1)$ CNN front end to extract features which is deployed to the DPU on PL and $2)$ Algebraic operations to present final results which are deployed on the PS ARM cores. To make full use of the Zynq MPSoC, we optimize the data follow for both of these components.
 
 \begin{figure}[t]  
     \centering  
-    {\includegraphics[width=\linewidth]{fig/depth_vo_feat.eps}\label{fig:dvo}}
+    {\includegraphics[width=0.8\linewidth]{fig/depth_vo_feat.eps}\label{fig:dvo}}
     \caption{Illustration of training framework for visual odometry, where $T_{LtoR}$ is the relative camera pose transformations between left and right views. To speed up the inference, we attepmt different quantization strategies to fixed-finetune the network for VO with fixed-point feed forwarding and floating-point backpropagation.}
 \end{figure}
 
