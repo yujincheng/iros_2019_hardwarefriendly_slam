@@ -12,20 +12,19 @@ mapping (DSLAM) can share location and environmental information between robots 
 
 There are five components: DPR, VO, Match, RelPose and DOpt. DPR and VO are intra-robot operations, and require high computation resources on embedded system. Match, RelPose and DOpt are inter-robot operations, and consume most of the communication of DSLAM sytem. The RelPose components can and should depend the VO components since it can benefit from re-using the data and computation resources of VO.
 
-The previous work \cite{Cieslewski:20187ee} uses ORB feature-point based method to estimate the trajectory from the sequence of the stereo camera, and use NetVLAD \cite{Arandjelovic:2017997} to do place recognition. These two algorithms both consume a large amount of computation and storage, and pose a great challenge to DSLAM on the embedded system. The DSLAM frame in \cite{Cieslewski:20187ee} is illustrated in \cref{fig:all_pre}.
+The previous work \cite{Cieslewski:20187ee} uses ORB-SLAM\cite{Mur-Artal:2017281} as the VO and NetVLAD\cite{Arandjelovic:2017997} as the DPR component. These two algorithms both consume a large amount of computation and storage, and pose a great challenge to DSLAM on the embedded system. The DSLAM frame in \cite{Cieslewski:20187ee} is illustrated in \cref{fig:all_pre}.
 
 
 \begin{figure*}[thb]
     \begin{minipage}[t]{0.5\linewidth}  
     \centering
-    \subfigure[DSLAM in \cite{Cieslewski:20187ee}] {\includegraphics[width=0.8\textwidth]{fig/overview_pre.eps}\label{fig:all_pre}}
+    \subfigure[DSLAM in \cite{Cieslewski:20187ee}] {\includegraphics[width=1\textwidth]{fig/overview_pre.eps}\label{fig:all_pre}}
     \end{minipage}
     \begin{minipage}[t]{0.5\linewidth}  
     \centering  
-    \subfigure[Our hardware-software co-design DSLAM.] {\includegraphics[width=0.8\linewidth]{fig/overview_us.eps}\label{fig:all_us}} 
+    \subfigure[Our CNN-based DSLAM.] {\includegraphics[width=1\linewidth]{fig/overview_us.eps}\label{fig:all_us}} 
     \end{minipage}
-    \caption{???
-    % Overview of the DSLAM in \cite{Cieslewski:20187ee} and our hardware-software co-design DSLAM. Each agent (blue drones) will send the result of 6-D pose estimation and scene descriptor to a server or a central agent (red server or drone in figure) to do inter-robot place recognition and optimization. We use CNN instead of feature points to do pose estimation so that we can use CNN accelerator to speed up the whole process.
+    \caption{(a) The previous work uses ORB feature-point based method to estimate the trajectory from the sequence of the stereo camera, and use NetVLAD \cite{Arandjelovic:2017997} to do DPR. (b) Our framework adopt Depth-VO-Feat \cite{Zhan:2018e92} in DSLAM system as the monocular VO, and we use the same method of NetVLAD in \cite{Cieslewski:20187ee} to do DPR. We use Xilinx Zynq MPSoC hardware platform to for deployment.
     }
 \label{fig:overview}
 \end{figure*}
@@ -43,18 +42,18 @@ We deploy the system on Xilinx Zynq MPSoC hardware platform with DPU \cite{Tech:
 We also propose a new indicator called loop-closure recall (LCR), which indicates the remaining rate of loop-closure after trajectory merging, to evaluate the performance of trajectory merging.
 \end{itemize}
 
-The output result of DSLAM with different NetVLAD frequency is illustrated in \cref{fig:dslamresult}. The tranditional average trajectory error (ATE) can not indicate the performance of trajectory merging in DSLAM. 
+The output result of DSLAM with different NetVLAD frequency is illustrated in \cref{fig:dslamresult}. The tranditional average trajectory error (ATE) can not indicate the performance of trajectory merging in DSLAM.
 
 \begin{figure}[thb]
     \begin{minipage}[t]{0.475\linewidth}  
     \centering
-    \subfigure[NetVLAD/8 frames. \protect\          ATE=0.9] {\includegraphics[width=1\linewidth]{fig/8netvlad.eps}\label{fig:8netvlad}}
+    \subfigure[NetVLAD/8 frames. \protect\          ATE=9] {\includegraphics[width=1\linewidth]{fig/8netvlad.eps}\label{fig:8netvlad}}
     \end{minipage}
     \begin{minipage}[t]{0.475\linewidth}  
     \centering  
-    \subfigure[NetVLAD/12 frames. \protect\ ATE=0.9] {\includegraphics[width=1\linewidth]{fig/12netvlad.eps}\label{fig:12netvlad}} 
+    \subfigure[NetVLAD/12 frames. \protect\ ATE=9] {\includegraphics[width=1\linewidth]{fig/12netvlad.eps}\label{fig:12netvlad}} 
     \end{minipage}
-    \caption{The result of DSLAM. \Cref{fig:8netvlad} do NetVLAD every 8 frames, and the frame con
+    \caption{The DSLAM result of two robots(red and blue, the dashed is the ground truth the robots). (a) When do NetVLAD every 8 frames, the trajectories can be merged correctly. (b) When do NetVLAD every 12 frames, the trajectories can not be commendably merged. However, the ATE of these two results is similar.
     }
 \label{fig:dslamresult}
 \end{figure}

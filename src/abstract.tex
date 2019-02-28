@@ -3,7 +3,7 @@ mapping (DSLAM) can share location and environmental information between robots 
 With the development of Convolutional Neural Network(CNN), both the VO and DPR can be significantly improved in performance, such as Depth-VO-Feat\cite{Zhan:2018e92} and NetVLAD\cite{Arandjelovic:2017997}. However, previous works concentrate on the accuracy of the CNNs, yet consider little about the deployment CNNs on the embedded system.
 
 Because the embedded system usually support fixed-point CNN only, we propose a pose-sensitive fixed-point finetune method for the CNN-based monocular VO, and accelerate the VO from 230ms to 10ms with the similar accuracy. As the frequency of DPV influences the final result of DSLAM, we propose a module-mixed pipeline scheduling method to calculate the NetVLAD every 4 input frames from every 6 frames, and improve the final accuracy of DSLAM.
-We find the tranditional average trajectory error (ATE) can not indicate the performance of trajectory merging in DSLAM, so we propose a new indicator called loop-closure recall (LCR) to evaluate the performance of trajectory merging.
+% We find the tranditional average trajectory error (ATE) can not indicate the performance of trajectory merging in DSLAM, so we propose a new indicator called loop-closure recall (LCR) to evaluate the performance of trajectory merging.
 
 % With the gradual improvement of the single-agent capabilities, it is possible to build up the multi-agent collaborative intelligence system.
 % Distributed simultaneous localization and mapping (DSLAM) can share location and environmental information between robots and is the basis for many multi-agent applications.
