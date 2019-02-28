@@ -44,28 +44,33 @@ Substituting the run-time of each part into \cref{equ:pipeline1,equ:pipeline2,eq
 
 We calculate the relative 6-D pose between every two successive frames and the NetVLAD code every $8$ frames in the following experiments.
 
-\subsection{VO with DPU}
+\subsection{Visual Odometry with DPU}
 
 We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate does \cite{Zhan:2018e92}.
 
 % FIXME: 下面给了09和10的结果，这里finetune使用的数据集是不是需要修改一下
 At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
 
-\begin{table}[ht]
+\begin{table*}[htb]
     \centering
     \caption{Visual odometry (VO) results on test sequences (09, 10)}
     \footnotesize
     \begin{threeparttable}
-\begin{tabular}{|c||cc|cc|c|}
+\begin{tabular}{|c||cc|cc|cc|c|}
   \hline
-  \multirow{2}[2]{*}{Method} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
-                             & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
+  \multirow{2}[2]{*}{Method} & \multicolumn{2}{c|}{Quant. Strategy} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
+                             & Fixed Part             & Float Part  & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
   \hline
-  ORB-SLAM  &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
+  ORB-SLAM  & \multicolumn{2}{c|}{-} &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
   \hline
-  Zhan et al.(float)  &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
+  Depth-VO-Feat\cite{Zhan:2018e92} & \multicolumn{2}{c|}{-} &11.92 &3.60 &12.62 &3.43 &  \bigstrut\\
+  % Depth-VO-Feat\cite{Zhan:2018e92} & All Float &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
   \hline
-  Ours(fixed)  &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
+  \multirow{3}[3]{*}{Ours} & Conv+FC1,2 & FC$\_$pose       & & & & & \bigstrut\\
+  % \hline
+                           & Conv+FC1 & FC2+FC$\_$pose  & & & & & \bigstrut\\
+  % \hline
+                           & Conv & FC1,2+FC$\_$pose &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
   \hline
   \end{tabular}
   
@@ -74,7 +79,7 @@ At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 a
         \end{tablenotes}
       \end{threeparttable}
     \label{tab:VO}%
-  \end{table}%
+  \end{table*}%
 
   We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
 
