@@ -15,15 +15,15 @@ The goal of place recognition is to calculate a given frame into a limited set o
 Recent advances in the deep learning and the convolution neural network (CNN) enable powerful end-to-end mode for place recognition \cite{Noh:2017d0b, Arandjelovic:2017997}, and the NetVLAD method is one of the most accurate methods based on CNN. The NetVLAD algorithm based on VGG-16 model \cite{Simonyan:20143be} consumes more than $80G$ operations for a single $300 \times 300$ input image (each operation means addition or  multiplication). It is very challenging to deploy the NetVLAD on a traditional embedded hardware platform.
 
 \subsection{Hardware architecture of Zync MPSoC}
-The Xilinx Zync MPSoC is a chip with ARM cores and FPGA fabric. The system is illustrated in \cref{fig:plps}. The ARM cores with an embedded Linux operation system are called Processing System (PS). The FPGA fabric is called Programmable Logic (PL). The peripherals like camera and communication unit (WiFi or others) are accessible with PS. The high-bandwidth on-chip AXI interface is used to communicate between PS and PL. PS and PL can also share the DDR to transfer a large volume of data such as each frame of the camera.
+The Xilinx Zync MPSoC is a chip with ARM cores and FPGA fabric. The ARM cores with an embedded Linux operation system are called Processing System (PS). The FPGA fabric is called Programmable Logic (PL). The peripherals like camera and communication unit (WiFi or others) are accessible with PS. The high-bandwidth on-chip AXI interface is used to communicate between PS and PL. PS and PL can also share the DDR to transfer a large volume of data such as each frame of the camera.
 Deephi CNN accelerator, which is called DPU \cite{Tech:2019360}, is one of the state-of-the-art accelerators and is famous for high energy efficiency on various CNN structure. We deploy the accelerator on the PL side of Zynq SoC with the help of DPU.
 
-\begin{figure}[t]  
-    \centering  
-    \includegraphics[width=0.95\linewidth]{fig/plps.eps}
-    \caption{Hardware architecture of Zynq SoC}
-    \label{fig:plps}
-\end{figure}
+% \begin{figure}[t]  
+%     \centering  
+%     \includegraphics[width=0.95\linewidth]{fig/plps.eps}
+%     \caption{Hardware architecture of Zynq SoC}
+%     \label{fig:plps}
+% \end{figure}
 
 Though FPGA can significantly improve the performance and energy efficiency of CNN inference, FPGA cannot efficiently calculate the floating-point number and requires fixed-point parameters and intermediate data in CNN.
 

@@ -1,39 +1,64 @@
 \label{sec:introdutction}
-In recent years, with the development of the hardware and algorithms, the capabilities of a single agent have been significantly improved.
-To further expand the capabilities of intelligent robots, using several robots can accelerate many tasks, such as localization, exploration, and mapping.
-As simultaneous localization and mapping(SLAM) is an essential component in many tasks, it is important to do SLAM across different robots in many multi-agent applications.
-The camera is a widely used sensor in SLAM for its rich information and low cost. The previous work \cite{Cieslewski:20187ee} proposes a data-efficient decentralized SLAM(DSLAM) system based on the stereo camera.
-Especially, because it is simpler to deploy and does not require calibration, the monocular camera has become a hot topic in academic research. We aim to build up a monocular visual-based DSLAM in this work.
+In recent years, the capabilities of a single agent have been significantly improved. To further expand the capabilities of intelligent robots, using several robots can accelerate many tasks, such as localization, exploration, and mapping.
+Decentralized visual simultaneous localization and
+mapping (DSLAM) can share location and environmental information between robots and is the essential task for many multi-robot applications. \cite{Cieslewski:20187ee} concludes the basic procedure as \cref{fig:all}
 
-The goal of DSLAM is to share the maps and trajectories among the robots in a communication-constrained scenario. Also, because the communication is limited, there is not a central node that obtains all the sensor information from each agent, so that we need to design a specially optimized communication mechanism. There are three kinds of data need to be shared among agents: 1) the trajectory of each robot for merging, 2) the encoded information of place recognition for the coarse matching of inter-robot tracks, and 3) the details of the matched frame for inter-robot pose calculation and trajectory merging. The previous work \cite{Cieslewski:20187ee} uses ORB feature-point based method to estimate the trajectory from the sequence of the stereo camera, and use NetVLAD \cite{Arandjelovic:2017997} to do place recognition. Once the coarse matching of inter-robot tracks based on the NetVLAD succeeds, the ORB feature points of the corresponding frames are communicated for fine-grained inter-robot trajectory merging. However, \cite{Cieslewski:20187ee} needs to calculate the ORB feataure extraction and matching algorithm as well as the CNN-based NetVLAD algorithm simultaneously on the embedded system. These two algorithms both consume a large amount of computation and storage, and pose a great challenge to DSLAM on the embedded system. The DSLAM frame in \cite{Cieslewski:20187ee} is illustrated in \cref{fig:all_pre}.
+\begin{figure}[h]  
+    \centering  
+    \includegraphics[width=0.75\linewidth]{fig/all.eps}
+    \caption{DSLAM framework\cite{Cieslewski:20187ee}. \textbf{VO} is used to calculate the intra-robot 6-D absolute pose from the input frames. \textbf{DPR} produces a compact image representation that communicate among robots. \textbf{Match} stage finds out candidate inter-robot place recognition matches.  \textbf{RelPose} requires data from the matched robots and establishes relative poses between the robots trajectories. \textbf{DOpt} obtains the trajectories, intra-robot pose measurements from VO and inter-robot relative poses from RelPose, and updates the trajectories.}
+    \label{fig:all}
+\end{figure}
+
+There are five components: DPR, VO, Match, RelPose and DOpt. DPR and VO are intra-robot operations, and require high computation resources on embedded system. Match, RelPose and DOpt are inter-robot operations, and consume most of the communication of DSLAM sytem. The RelPose components can and should depend the VO components since it can benefit from re-using the data and computation resources of VO.
+
+The previous work \cite{Cieslewski:20187ee} uses ORB feature-point based method to estimate the trajectory from the sequence of the stereo camera, and use NetVLAD \cite{Arandjelovic:2017997} to do place recognition. These two algorithms both consume a large amount of computation and storage, and pose a great challenge to DSLAM on the embedded system. The DSLAM frame in \cite{Cieslewski:20187ee} is illustrated in \cref{fig:all_pre}.
+
 
 \begin{figure*}[thb]
     \begin{minipage}[t]{0.5\linewidth}  
     \centering
-    \subfigure[DSLAM in \cite{Cieslewski:20187ee}] {\includegraphics[width=0.95\textwidth]{fig/overview_pre.eps}\label{fig:all_pre}}
+    \subfigure[DSLAM in \cite{Cieslewski:20187ee}] {\includegraphics[width=0.8\textwidth]{fig/overview_pre.eps}\label{fig:all_pre}}
     \end{minipage}
     \begin{minipage}[t]{0.5\linewidth}  
     \centering  
-    \subfigure[Our hardware-software co-design DSLAM.] {\includegraphics[width=0.95\linewidth]{fig/overview_us.eps}\label{fig:all_us}} 
+    \subfigure[Our hardware-software co-design DSLAM.] {\includegraphics[width=0.8\linewidth]{fig/overview_us.eps}\label{fig:all_us}} 
     \end{minipage}
-    \caption{Overview of the DSLAM in \cite{Cieslewski:20187ee} and our hardware-software co-design DSLAM. Each agent (blue drones) will send the result of 6-D pose estimation and scene descriptor to a server or a central agent (red server or drone in figure) to do inter-robot place recognition and optimization. We use CNN instead of feature points to do pose estimation so that we can use CNN accelerator to speed up the whole process.}
+    \caption{???
+    % Overview of the DSLAM in \cite{Cieslewski:20187ee} and our hardware-software co-design DSLAM. Each agent (blue drones) will send the result of 6-D pose estimation and scene descriptor to a server or a central agent (red server or drone in figure) to do inter-robot place recognition and optimization. We use CNN instead of feature points to do pose estimation so that we can use CNN accelerator to speed up the whole process.
+    }
 \label{fig:overview}
 \end{figure*}
 
+Monocular systems are much easier to deploy than binocular systems. The transitional monocular feature point based VO should use complex depth reconstruction methods to compute the absolute scale of the pose scale\cite{pizzoli2014remode}, leading to speed-down. With the development of CNN, we can reconstruct the depth and pose with the absolute scale from the monocular camera directly, making monocular VO more robust and efficient\cite{Zhan:2018e92}. ecent advances in deep learning and the availability of large labelled visual datasets have significantly improved the accuracy of place recognition, such as NetVLAD\cite{Arandjelovic:2017997}. However, previous works concentrate on the accuracy of the CNNs, yet consider little about the deployment CNNs on the embedded system.
 
-With the development of neural networks in recent years, many CNN-based algorithms can also be applied to DSLAM systems. With the help of CNN, we can reconstruct the depth and pose with the absolute scale from the monocular camera. Monocular systems are much easier to deploy than binocular systems. 
-The tracking based on CNN can be made more robust, as the CNN-predicted depth and pose does not suffer from the accumulated errors from previous frames, as CNN processes on each pair of two frames individually \cite{Tateno:2017776}. As CNN is a versatile and widely researched method for image processing, it is easy to use the same network structure for many other tasks rather than depth or pose estimation, such as object detection \cite{liu2016ssd} and semantic segmentation\cite{long2015fully}.
-Last but not least, CNN's computational structure is uniform and can be individually optimized when resources are limited on embedded systems such as embedded GPU\cite{mao2018towards} and embedded FPGA\cite{Yu:2018:IDC:3299999.3283452,Tech:2019360}. Xilinx DPU\cite{Tech:2019360} is one of state-of-the-art FPGA-based CNN accelerators, and is used in this work.
-
-Though DSLAM system can benefit from the development of CNN, the fully CNN-based DSLAM system faces several key issues: 1) The DSLAM system needs to run multiple CNNs simultaneously for multitasking. The requirement of huge computing resources brings a challenge to real-time implementation. 2) Due to the lack of feature point extraction, we need to explore new data-efficient communication mechanism for inter-robot trajectory merging.
-
-To solve the problems mentioned above, we propose a hardware-software co-design DSLAM framework with the following contributions. The proposed DSLAM framework is illustrated in \cref{fig:all_us}:
+Though DSLAM system can benefit from the development of CNN, the fully CNN-based DSLAM system faces some key issues: 1) The embedded system usually support fixed-point CNN. 2) The speed will decline in the embedded system when running several CNN models simultaneously, the speed-down of DPR will lead to the decline of the final DSLAM accuracy. Therefore, we build up a CNN-based monocular DSLAM system on embedded FPGA platform, with following contributions:
 
 \begin{itemize}
-\item To the best of our knowledge, this work is the first to implement all components of monocular DSLAM with CNN. We adopt Depth-VO-Feat \cite{Zhan:2018e92} in DSLAM system to estimate the pose from the input monocular camera. We use the same method of NetVLAD in \cite{Cieslewski:20187ee} to do place recognition.
-\item We use Xilinx DPU to accelerate the DSLAM system on embedded systems. We use fixed-point fine tune method to transformed the original floating-point Depth-VO-Feat model to fixed-point for deploying on Xilinx DPU. The accuracy of the fixed-point model is even better with the floating-point model.
-\item We communicate the down sampled images of corresponding matched frames for inter-robot trajectory merging, so that we can also use Depth-VO-Feat and the accelerator.
+\item To the best of our knowledge, this work is the first to implement all components of monocular DSLAM with CNN.
+% We adopt Depth-VO-Feat \cite{Zhan:2018e92} in DSLAM system to estimate the pose from the input monocular camera. We use the same method of NetVLAD in  \cite{Cieslewski:20187ee} to do place recognition. 
+We deploy the system on Xilinx Zynq MPSoC hardware platform with DPU \cite{Tech:2019360}, which is an embedded CNN accelerator. The proposed DSLAM framework is illustrated in \cref{fig:all_us}.
+\item As the embedded system usually support fixed-point CNN, we propose a pose-sensitive fixed-point fine-tune method to make the feature extraction layers fixed-point and remain the pose prediction layers floating-point, reaching the same accuracy with the original floating-point VO network. We schedule the fixed-point layers on DPU and the floating-point layers on CPU, so that we can accelerate the VO to 10ms.
+\item The frequency of the NetVLAD influences the final result of DSLAM. We propose a cross-components scheduling method to scheduling the computation flow across VO and DPR, and pipeline the computation across the PL and PS of MPSoC to make full use of the embedded platform. We calculate the NetVLAD every 4 input frames from every 6 frames, improving the final accuracy of DSLAM. 
+We also propose a new indicator called loop-closure recall (LCR), which indicates the remaining rate of loop-closure after trajectory merging, to evaluate the performance of trajectory merging.
 \end{itemize}
-    
-   
-The rest part of this article is orgnized as follows. \Cref{sec:background} will give the basic idea of CNN based methods and the hardware architecture of embedded FPGA. \Cref{sec:hardsoft} will detail the implementation of our hardware-software co-design DSLAM system. The experiment result will be given in \Cref{sec:experiment}. \Cref{sec:conclusion} will conclude this paper.
+
+The output result of DSLAM with different NetVLAD frequency is illustrated in \cref{fig:dslamresult}. The tranditional average trajectory error (ATE) can not indicate the performance of trajectory merging in DSLAM. 
+
+\begin{figure}[thb]
+    \begin{minipage}[t]{0.475\linewidth}  
+    \centering
+    \subfigure[NetVLAD/8 frames. \protect\          ATE=0.9] {\includegraphics[width=1\linewidth]{fig/8netvlad.eps}\label{fig:8netvlad}}
+    \end{minipage}
+    \begin{minipage}[t]{0.475\linewidth}  
+    \centering  
+    \subfigure[NetVLAD/12 frames. \protect\ ATE=0.9] {\includegraphics[width=1\linewidth]{fig/12netvlad.eps}\label{fig:12netvlad}} 
+    \end{minipage}
+    \caption{The result of DSLAM. \Cref{fig:8netvlad} do NetVLAD every 8 frames, and the frame con
+    }
+\label{fig:dslamresult}
+\end{figure}
+
+
+
+% The rest part of this article is orgnized as follows. \Cref{sec:background} will give the basic idea of CNN based methods and the hardware architecture of embedded platform, Xilinx Zynq MPSoC. \Cref{sec:hardsoft} will detail the implementation of our pose-sensitive fixed-point fine-tune method and the cross-components scheduling method. The experiment results will be given in \Cref{sec:experiment}. \Cref{sec:conclusion} will conclude this paper.

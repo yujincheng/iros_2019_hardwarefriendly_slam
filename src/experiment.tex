@@ -1,17 +1,70 @@
 \label{sec:experiment}
 The speed and the accuracy of our proposed hardware-software co-design DSLAM will be evaluated in this section.
 
+\subsection{VO with pose-sensitive fixed-point fine-tune}
+
+\begin{table*}[bht]
+  \centering
+  \caption{Visual odometry (VO) results on test sequences (09, 10)}
+  \footnotesize
+  \begin{threeparttable}
+\begin{tabular}{|c||cc|cc|cc|c|}
+\hline
+\multirow{2}[2]{*}{Method} & \multicolumn{2}{c|}{Quant. Strategy} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
+                           & Fixed Part             & Float Part  & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
+\hline
+ORB-SLAM  & \multicolumn{2}{c|}{-} &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
+\hline
+Depth-VO-Feat\cite{Zhan:2018e92} & \multicolumn{2}{c|}{-} &11.92 &3.60 &12.62 &3.43 &  \bigstrut\\
+% Depth-VO-Feat\cite{Zhan:2018e92} & All Float &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
+\hline
+\multirow{3}[3]{*}{Ours} & Conv+FC1,2 & FC$\_$pose & & & & & \bigstrut\\
+% \hline
+                         & Conv+FC1 & FC2+FC$\_$pose  & 13.80 & 4.38 & 11.3 & 4.30 & \bigstrut\\
+% \hline
+                         & Conv & FC1,2+FC$\_$pose &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
+\hline
+\end{tabular}
+
+\begin{tablenotes}
+      \item[*] $t_{err}(\%)$ is the average translational drift error. $r_{err}({}^{\circ}/100m)$ is average rotational drift error.
+      \end{tablenotes}
+    \end{threeparttable}
+  \label{tab:VO}%
+\end{table*}%
+
+
+We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate does \cite{Zhan:2018e92}.
+
+% FIXME: 下面给了09和10的结果，这里finetune使用的数据集是不是需要修改一下
+At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
+
+  We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
+
+
+  \begin{figure}[t]
+    \centering  
+    \subfigure[Traj. on Seq. 09] {\includegraphics[height=0.9\linewidth]{fig/sequence_09.eps}} 
+    \subfigure[Traj. on Seq. 10] {\includegraphics[height=0.9\linewidth]{fig/sequence_10.eps}} 
+    \caption{Qualitative evaluation of odometry on the KITTI Odometry test sequences (09, 10).}
+    \label{fig:VO}
+  \end{figure}
+
+
+Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
+
+
 \subsection{Run-Time}
 
-We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi Aristotle board with a ZU9 MPSOC. The intelligent car and the board is illustrated in \cref{fig:env}. \Cref{tab:time} shows the run time of each part of our DSLAM system. The pipeline of scheduling of these parts is shown in \cref{sec:background}.
+We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi Aristotle board with a ZU9 MPSOC. \Cref{tab:time} shows the run time of each part of our DSLAM system. The pipeline of scheduling of these parts is shown in \cref{sec:background}.
 
 
-\begin{figure}[t]
-    \centering  
-    \includegraphics[width=0.95\linewidth]{fig/env.eps}
-    \caption{The intelligent car with the Zynq MPSoC board.}
-    \label{fig:env}
-\end{figure}
+% \begin{figure}[t]
+%     \centering  
+%     \includegraphics[width=0.95\linewidth]{fig/env.eps}
+%     \caption{The intelligent car with the Zynq MPSoC board.}
+%     \label{fig:env}
+% \end{figure}
 
 \begin{table}[h]
     \centering
@@ -43,57 +96,6 @@ We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi
 Substituting the run-time of each part into \cref{equ:pipeline1,equ:pipeline2,equ:pipeline3}. We find out that the run-time of NetVLAD on PS ($T_{3}$) becomes the bottleneck of the system and \cref{equ:pipeline3} constrains the NetVLAD frequency ($N$) to $8$.
 
 We calculate the relative 6-D pose between every two successive frames and the NetVLAD code every $8$ frames in the following experiments.
-
-\subsection{Visual Odometry with DPU}
-
-We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate does \cite{Zhan:2018e92}.
-
-% FIXME: 下面给了09和10的结果，这里finetune使用的数据集是不是需要修改一下
-At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
-
-\begin{table*}[htb]
-    \centering
-    \caption{Visual odometry (VO) results on test sequences (09, 10)}
-    \footnotesize
-    \begin{threeparttable}
-\begin{tabular}{|c||cc|cc|cc|c|}
-  \hline
-  \multirow{2}[2]{*}{Method} & \multicolumn{2}{c|}{Quant. Strategy} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
-                             & Fixed Part             & Float Part  & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
-  \hline
-  ORB-SLAM  & \multicolumn{2}{c|}{-} &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
-  \hline
-  Depth-VO-Feat\cite{Zhan:2018e92} & \multicolumn{2}{c|}{-} &11.92 &3.60 &12.62 &3.43 &  \bigstrut\\
-  % Depth-VO-Feat\cite{Zhan:2018e92} & All Float &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
-  \hline
-  \multirow{3}[3]{*}{Ours} & Conv+FC1,2 & FC$\_$pose       & & & & & \bigstrut\\
-  % \hline
-                           & Conv+FC1 & FC2+FC$\_$pose  & & & & & \bigstrut\\
-  % \hline
-                           & Conv & FC1,2+FC$\_$pose &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
-  \hline
-  \end{tabular}
-  
-  \begin{tablenotes}
-        \item[*] $t_{err}(\%)$ is the average translational drift error. $r_{err}({}^{\circ}/100m)$ is average rotational drift error.
-        \end{tablenotes}
-      \end{threeparttable}
-    \label{tab:VO}%
-  \end{table*}%
-
-  We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
-
-
-  \begin{figure}[t]
-    \centering  
-    \subfigure[Traj. on Seq. 09] {\includegraphics[height=0.9\linewidth]{fig/sequence_09.eps}} 
-    \subfigure[Traj. on Seq. 10] {\includegraphics[height=0.9\linewidth]{fig/sequence_10.eps}} 
-    \caption{Qualitative evaluation of odometry on the KITTI Odometry test sequences (09, 10).}
-    \label{fig:VO}
-  \end{figure}
-
-
-Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
 
 \subsection{NetVLAD with DPU}
 
