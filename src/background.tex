@@ -1,6 +1,6 @@
 \label{sec:background}
 \subsection{CNN based methods in DSLAM}
-As described before, there are two essential components on each agent: $1)$ Visual Odometry (VO) and $2)$ Place Recognition.
+As described before, there are two essential components on each agent: $1)$ Visual Odometry (VO) and $2)$ Place Recognition (DPR).
 
 \subsubsection{Visual Odometry (VO)}
 
@@ -8,7 +8,7 @@ Visual odometry estimation is the task to infer ego-motion from a sequence of im
 
 As FPGA is one of the most promising platforms as the accelerator for VO, the SLAM system on FPGA has become a hot research topic. However, FPGA-accelerated feature extraction still consumes a lot of time and computing resources, which cannot be deployed simultaneously with an FPGA-accelerated neural network.
 
-\subsubsection{Place Recognition}
+\subsubsection{Place Recognition (DPR)}
 
 The goal of place recognition is to calculate a given frame into a limited set of places. Each place can be encoded as a concise code which can be easy transferred with low communication cost. Traditional place recognition method usually translate the input frame as the aggregation of handcrafted feature point and local descriptors, like SIFT \cite{Lowe:2004e6e} or ORB \cite{Mur-Artal:2017281}, using vectorization techniques like bag-of-words (BoW) \cite{Galvez-Lopez:2012c94} or vector of locally aggregated descriptors(VLAD) \cite{Jegou:2010f45}.
 
