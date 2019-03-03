@@ -1,62 +1,53 @@
 \label{sec:experiment}
-The speed and the accuracy of our proposed hardware-software co-design DSLAM will be evaluated in this section.
 
-\subsection{VO with pose-sensitive fixed-point fine-tune}
-
-\begin{table*}[bht]
+\begin{figure*}[t]
+  \begin{minipage}[t]{0.32\linewidth}  
   \centering
-  \caption{Visual odometry (VO) results on test sequences (09, 10)}
-  \footnotesize
-  \begin{threeparttable}
-\begin{tabular}{|c||cc|cc|cc|c|}
-\hline
-\multirow{2}[2]{*}{Method} & \multicolumn{2}{c|}{Quant. Strategy} & \multicolumn{2}{c|}{Seq. 09} & \multicolumn{2}{c|}{Seq. 10} & run time  \bigstrut[t]\\
-                           & Fixed Part             & Float Part  & $t_{err}$        & $r_{err}$ & $t_{err}$        & $r_{err}$ & $(ms/frame)$ \bigstrut[b]\\
-\hline
-ORB-SLAM  & \multicolumn{2}{c|}{-} &15.30 &0.26 &3.68 &0.48 &  \bigstrut\\
-\hline
-Depth-VO-Feat\cite{Zhan:2018e92} & \multicolumn{2}{c|}{-} &11.92 &3.60 &12.62 &3.43 &  \bigstrut\\
-% Depth-VO-Feat\cite{Zhan:2018e92} & All Float &10.49 &3.34 &11.64 &3.14 &  \bigstrut\\
-\hline
-\multirow{3}[3]{*}{Ours} & Conv+FC1,2 & FC$\_$pose & 13.27 & 5.27 & 14.75 & 7.78 & 8 \bigstrut\\
-% \hline
-                         & Conv+FC1 & FC2+FC$\_$pose  & 13.80 & 4.38 & 11.3 & 4.30 & 8 \bigstrut\\
-% \hline
-                         & Conv & FC1,2+FC$\_$pose &10.27 &4.08 &8.84 &4.01 & 12 \bigstrut\\
-\hline
-\end{tabular}
+  \subfigure[NetVLAD/1frame.] {\includegraphics[width=0.75\linewidth]{fig/1netvlad.eps}\label{fig:1netvlad}}
+  \end{minipage}
+  \begin{minipage}[t]{0.32\linewidth}  
+  \centering  
+  \subfigure[NetVLAD/4frames.] {\includegraphics[width=0.75\linewidth]{fig/4netvlad.eps}\label{fig:4netvlad}} 
+  \end{minipage}
+  \begin{minipage}[t]{0.32\linewidth}  
+  \centering  
+  \subfigure[NetVLAD/8frames.] {\includegraphics[width=0.75\linewidth]{fig/8netvlad.eps}\label{fig:8netvlad}} 
+  \end{minipage}
+  
+  \begin{minipage}[t]{0.32\linewidth}  
+  \centering  
+  \subfigure[NetVLAD/10frames.] {\includegraphics[width=0.75\linewidth]{fig/10netvlad.eps}\label{fig:10netvlad}} 
+  \end{minipage}
+  \begin{minipage}[t]{0.32\linewidth}  
+  \centering  
+  \subfigure[NetVLAD/12frames.] {\includegraphics[width=0.75\linewidth]{fig/12netvlad.eps}\label{fig:12netvlad}} 
+  \end{minipage}
+  \begin{minipage}[t]{0.32\linewidth}  
+  \centering  
+  \subfigure[NetVLAD/14frames.] {\includegraphics[width=0.75\linewidth]{fig/14netvlad.eps}\label{fig:14netvlad}} 
+  \end{minipage}
+  \caption{The DSLAM result of two robots(red and blue, the dashed is the ground truth). The higher NetVLAD frequency is, the better the DSLAM performs.
+%   (d) find a single intra-robot loop closure which (c) and (d) cannot find, so that the result is better than (c) and (e).
+  }
+\label{fig:dslamresult}
+\end{figure*}
 
-\begin{tablenotes}
-      \item[*] $t_{err}(\%)$ is the average translational drift error. $r_{err}({}^{\circ}/100m)$ is average rotational drift error.
-      \end{tablenotes}
-    \end{threeparttable}
-  \label{tab:VO}%
-\end{table*}%
+In this section, we will evaluate the speed and accuracy of each proposed CNN components, as well as the impact of our optimization on final DSLAM result.
 
+\subsection{VO with Pose-Sensitive Fixed-Point Finetune}
 
-We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 11 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In our design, we resize the image to $608 \times 160$ as the original Deepth-VO-Feate does \cite{Zhan:2018e92}.
-
-% FIXME: 下面给了09和10的结果，这里finetune使用的数据集是不是需要修改一下
-At the fixed-finetune procedure, we use the stereo pairs in sequences 01 to 10 as the training set. The training super parameters in \cref{equ:loss} are $[\lambda_{ir},\lambda_{fr},\lambda_{ds}] = [1,0.1,10]$. At the evaluation procedure, we use the left-eye input images of the stereo pairs of the 00 sequence of KITTI as the test set.
-
-  We evaluate the VO on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors for the testing sequence 09 and 10 in \cref{tab:VO}.  The comparison of the estimated trajectory for the methods is illustrated in \cref{fig:VO}.
-
-
-  \begin{figure}[t]
-    \centering  
-    \subfigure[Traj. on Seq. 09] {\includegraphics[height=0.9\linewidth]{fig/sequence_09.eps}} 
-    \subfigure[Traj. on Seq. 10] {\includegraphics[height=0.9\linewidth]{fig/sequence_10.eps}} 
-    \caption{Qualitative evaluation of odometry on the KITTI Odometry test sequences (09, 10).}
-    \label{fig:VO}
-  \end{figure}
+We evaluate our VO approach with DPU on KITTI dataset \cite{geiger2013vision}. The dataset contains 61 labeled video sequences with stereo pairs, with original image size at $1242 \times 375$ pixels. In the following experiments, we resize the image to $608 \times 160$ in training and testing processes, just like the original Depth-VO-Feat \cite{Zhan:2018e92} does. We use the 00-08 sequences from KITTI as the training set, and evaluate the network on sequence 09 and 10 on the sub-sequences at length of [100,200,...,800] and report the average translational and rotational errors in \cref{tab:VO}. The comparison of the estimated trajectory for different methods is illustrated in \cref{fig:VO}. We use the popular SLAM system, ORB-SLAM \cite{Mur-Artal:2017281}, as the baseline.
+ 
+We use the Pose-Sensitive fixed-point finetune method to balance the speed and accuracy. We use different strategies to split the VONet, and finetune the VONet with the same training superparameters. The initial learning rate is $1e^{-5}$ and the number of finetune iterations is $240000$, which is sufficient to train Depth-VO-Feat from random initialization. We snapshot the network weights every $5000$ iteration, and list the accuracy of the best snapshot in \cref{tab:VO}. The \textit{Quant. Strategy} indicates the configuration of Pose-Sensitive fixed-point finetune. The \textit{Fixed Part} is the feature extraction layers on PL, and the \textit{Float Part} is the pose prediction layers on PS. Because the computation volume of FC layers is much less than that of CONV layers, we can split all of the FC layers into pose prediction network, significantly improving the accuracy by consuming little extra time.
 
 
-Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
+
+% Because of the fixed-point number used in our design, which sacrifices the precision of the CNN, the VO accuracy is not as good as the previous works \cite{Mur-Artal:2017281, Zhan:2018e92}. On the other hand, our VO can calculate the 6-D pose within $20ms$ on a resource-constrained embedded platform.
 
 
-\subsection{Run-Time}
+\subsection{Run-Time with/without Cross-Module Scheduling}
 
-We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi Aristotle board with a ZU9 MPSOC. \Cref{tab:time} shows the run time of each part of our DSLAM system. The pipeline of scheduling of these parts is shown in \cref{sec:background}.
+We evaluate our VO and NetVLAD implementation simutaneously on a Xilinx ZU9 MPSOC. \Cref{tab:time} shows the run time of each part of our DSLAM system.
 
 
 % \begin{figure}[t]
@@ -68,78 +59,76 @@ We evaluate our DSLAM on two intelligent cars which are controlled by the Deephi
 
 \begin{table}[h]
     \centering
-    \caption{Run-Time of each part in our DSLAM}
+    \caption{Run time of each part in our DSLAM}
     \footnotesize
     \begin{threeparttable}
   % Table generated by Excel2LaTeX from sheet 'Sheet2'
   \setlength{\tabcolsep}{1mm}{
 % Table generated by Excel2LaTeX from sheet 'Sheet1'
-    \begin{tabular}{|c|c|c|c|c|}
-    \hline
-          & NetVLAD, PL & VO, PL  & VO, PS  & NetVLAD, PS  \bigstrut[t]\\
-          & ($T_{0}$) &  ($T_{1}$) &  ($T_{2}$) &  ($T_{3}$) \bigstrut[b]\\
-    \hline
-    Execute time & \multirow{2}[2]{*}{66} & \multirow{2}[2]{*}{3} & \multirow{2}[2]{*}{10} & \multirow{2}[2]{*}{354} \bigstrut[t]\\
-    (ms)  &       &       &       &  \bigstrut[b]\\
-    \hline
-    \end{tabular}%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+      & VO    & DPR & DPR, PL & VO, PL  & VO, PS  & DPR, PS  \bigstrut[t]\\
+      & ($T_{V}$) & ($T_{D}$) & ($T_{0}$) &  ($T_{1}$) &  ($T_{2}$) &  ($T_{3}$) \bigstrut[b]\\
+\hline
+Execute & \multirow{2}[2]{*}{13} & \multirow{2}[2]{*}{422} & \multirow{2}[2]{*}{66} & \multirow{2}[2]{*}{3} & \multirow{2}[2]{*}{10} & \multirow{2}[2]{*}{356} \bigstrut[t]\\
+ time (ms)  &       &       &       &       &       &  \bigstrut[b]\\
+\hline
+\end{tabular}%
+
     
   }
   \begin{tablenotes}
         \item[*] We read the camera at 20fps, so the $T_{f}$ in \cref{fig:pipline} is 50ms.
+        \item[*] We use the NetVLAD method to do DPR in this paper.
         \end{tablenotes}
       \end{threeparttable}
     \label{tab:time}%
     
   \end{table}%
 
-Substituting the run-time of each part into \cref{equ:pipeline1,equ:pipeline2,equ:pipeline3}. We find out that the run-time of NetVLAD on PS ($T_{3}$) becomes the bottleneck of the system and \cref{equ:pipeline3} constrains the NetVLAD frequency ($N$) to $8$.
+Since the NetVLAD frequency ($N$) before cross-module scheduling is constrained by \cref{equ:serial}, NetVLAD can be calculated once every 12 frames. We divide the running time of the DSLAM into three threads: PL, VO on PS, NetVLAD on PS, and we calculate the running time of each part, which satisfies \cref{equ:pipeline1,equ:pipeline2,equ:pipeline3} respectively. Then we find out that run-time of the NetVLAD on PS ($T_{3}$) is the bottleneck of DSLAM system and \cref{equ:pipeline3} constrains the NetVLAD frequency ($N$) to $8$.
 
-We calculate the relative 6-D pose between every two successive frames and the NetVLAD code every $8$ frames in the following experiments.
+%Substituting the run-time of each part into \cref{equ:pipeline1,equ:pipeline2,equ:pipeline3}, we find out that run-time of the NetVLAD on PS ($T_{3}$) becomes the bottleneck of the system and \cref{equ:pipeline3} constrains the NetVLAD frequency ($N$) to $8$.
+
+The effect of NetVLAD frequency on the DSLAM result will be further discussed in \cref{sec:dlamexp}.  
 
 \subsection{NetVLAD with DPU}
 
-We evaluate the NetVLAD performance on the loop close dataset for KITTI\cite{KITTIGroundTruth}.
+We evaluate the NetVLAD performance on the loop-closure dataset based on KITTI \cite{KITTIGroundTruth}.
 The dataset labels the ground truth of loop closure for these sequences based on the metric positions of each image. Specifically, it compares the position of each image to the others in the sequence and regards the one as a loop if it lies within a radius of $6m$.
 
-The precision-recall curves of the original NetVLAD with an output of 4096 dimensions (Blue), fixed-point NetVLAD 4096-D output (Green), original NetVLAD with 128-D output (Red), and fixed-point NetVLAD 128-D output (Yellow) are shown in \cref{fig:reloc}. We use sequence 00 as the test sequence.
+The precision-recall curves of the original NetVLAD with an output of 4096 dimensions (Blue), fixed-point NetVLAD 4096-D output (Green), original NetVLAD with 128-D output (Red), and fixed-point NetVLAD 128-D output (Yellow) are shown in \cref{fig:reloc}. We take sequence 00 as the test sequence, and achieve similar accuracy with the floating-point model of the same output dimensions.
 
 
-\begin{figure}[t]
+\begin{figure}[thb]
   \centering  
-  \includegraphics[width=0.75\linewidth]{fig/val_reloc.eps}
+  \includegraphics[width=0.95\linewidth]{fig/val_reloc.eps}
   \caption{ROC curves on sequence 00.}
   \label{fig:reloc}
 \end{figure}
 
-Our NetVLAD with DPU performs similarly to the original NetVLAD with the same output dimension but runs much faster with the help of the acceleration techniques on FPGA and architecture design. Even if there are sightly accuracy reduction on the ROC curves, the following experiment shows that the slight drawback would not make the overall DSLAM performance decline.
-
 \subsection{DSLAM Evaluation}
-
-With the help of our hardware-software co-design VO and place recognition components on the embedded system, we can build up the DSLAM system like the previous work \cite{Cieslewski:20187ee}. However, unlike the feature point based method in previous \cite{Cieslewski:20187ee}, our approach does not necessarily compute the feature point for each frame. The previous work \cite{Cieslewski:20187ee} transfers the ORB feature points among agents to do inter-robot pose estimation and trajectory merging.
-
-%讲下更具体的实验设计
-
-A possible way to solve the inter-robot pose estimation is to calculate the feature points and descriptors of the corresponding robot and frames when the inter-robot loop closure occurs. However, on the one hand, the traditional feature point detection and description method cannot get the absolute scale from a single image. On the other hand, it is resource consuming to do feature point algorithms like SIFT\cite{Jegou:2010f45} and ORB\cite{Mur-Artal:2017281}. The agents may stop and solve the feature points. We directly transfer the down-sampled $608 \times 160$ image among the agents and use the same method as the proposed VO with DPU to do the inter-robot pose estimation. The result of the merged trajectory is illustrated in \cref{fig:dslam}.
-
-
-\begin{figure}[ht]
-  \centering  
-  \includegraphics[width=0.85\linewidth]{fig/dslam.eps}
-  \caption{??? The sub-trajectory of each agent and the merged trajectory.}
-  \label{fig:dslam}
-\end{figure}
+\label{sec:dlamexp}
 
 \begin{figure}[thb]
   \centering  
-  \includegraphics[width=0.85\linewidth]{fig/data.eps}
-  \caption{??? The total communication traffic of the propsoed DSLAM}
-  \label{fig:data}
+  \includegraphics[width=0.95\linewidth]{fig/dslam_curve.eps}
+  \caption{ATE, ARE and LCR curves on sequence 00. For ATE and ARE, lower is better, and for LCR, higher is better. Lower $NetVLAD /\sharp frames$  means higher NetVLAD frequency. The NetVLAD frequency is $NetVLAD/12frames$ for serial scheduling and  $NetVLAD/8frames$ for Cross-Component scheduling.}
+  \label{fig:curves}
 \end{figure}
 
-There are three kinds of data need to be transferred among the agents and the server: $1)$ the VO results of each frame (VO), $2)$ the NetVLAD results of every $8$ frames (NetVLAD), $3)$ the image need for inter-robot relative pose estimation (RelPose).
 
-At the beginning of the task, there is no inter-robot loop closure detected, so there is no data traffic for RelPose. When inter-robot loop closure occurs, the data traffic for RelPose increases rapidly. The previous work\cite{Cieslewski:20187ee} also faces this problem though it uses feature point for inter-robot relative pose estimation.
+We evaluate our DSLAM system on KITTI odometry dataset. Firstly we divide the KITTI sequence into 2 subsequences with a 10-frame overlap, and resize the input image to  $608 \times 160$ for VO and DPR. We treat each subsequence as the raw data for each robot. 
 
+We use the same method in \cite{Cieslewski:20187ee} to simulate the DOpt and merge the two trajectories. The DOpt method used in this work is proposed in \cite{Choudhary:2017e66}.
+% , which is a two-stage approach to solve the optimization problem in a decentralized manner: 1) First, it gets an estimation for the rotations of all robots, and 2) then it recovers the full poses and top-off the result with a Gauss-Newton (GN) iteration.
 
-The total communication traffic of the proposed DSLAM system on KITTI 00 is increasing with time and is shown in \cref{fig:data}.
+We run each subsequence on the Xilinx MPSoC ZU9 platform to get the results of VO and DPR. The merged trajectories before and after cross-module scheduling are shown in \cref{fig:12netvlad,fig:8netvlad}. The results of other  NetVLAD frequencies, illustrated as \cref{fig:1netvlad,fig:10netvlad,fig:12netvlad}, are simulated with the fixed-point CNN model on desktop computer.
+
+% To further explore the effect of NetVLAD frequency on the final DSLAM result, we run the fixed-point NetVLAD model with different frequency on our desktop computer, and do DOpt with the same VO results from Xilinx MPSoC ZU9. More merged trajectories with different NetVLAD frequency are illustrated as \cref{fig:1netvlad,fig:10netvlad,fig:12netvlad}.
+
+Tranditional indicators, such as average translational error (ATE) and average rotational error(ARE), can not demonstrate the performance of trajectory merging in DSLAM, so we propose a new metric called loop-closure recall rate (LCR) to evaluate the DSLAM system. LCR indicates the success rate of loop-closure detection on the merged trajectory, which can reflect the performance of trajectory merging. LCR is calculated by the following formula:$$LCR=\frac{\eta_{merged\ tracjectory}}{\eta_{groundtruth}}$$, where $\eta$ is the number of frame pairs with successful place recognition. In our experiments, when the Euclidean distance between one point  and the other point on the trajectory is less than 6 meters, just like \cite{zhang2018graph}, we think that this is the place that has been reached before, that is, the location matches, forming a loop.
+
+\Cref{fig:curves} shows that with the increase of the NetVLAD frequency, there is a downward trend on ATE and ARE. However, the ATE and ARE strongly depend on the loop-closure result, and a single accidentally detected loop-closure will dramatically change the trajectory. That's why \cref{fig:12netvlad} performers better than \cref{fig:10netvlad} with a lower NetVLAD frequency. The LCR can efficiently indicate the trajectory merging performance: as the NetVLAD frequency increases, the LCR curve also increases.
+
+From \cref{fig:dslamresult} and \cref{fig:curves}, we can conclude that the NetVLAD frequency higher than $NetVLAD/8frames$  reach a similar high level performance in different indicators. Continuous improvement of the NetVLAD frequency from $NetVLAD/8frames$ has limited effect on the final DSLAM performance. Our cross-component scheduling method can improve the NetVLAD frequency from  $NetVLAD/12frames$ to  $NetVLAD/8frames$, and thus significantly evolve the DSLAM performance.

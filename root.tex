@@ -37,23 +37,28 @@
 \usepackage{amssymb}  % assumes amsmath package installed
 
 \usepackage{bigstrut,multirow}
+	
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
 \usepackage{cleveref}
 \crefname{figure}{fig}{figs}
 
+\usepackage{microtype}
+
+
 \title{\LARGE \bf
-Data-Efficient and Hardware-Efficient Decentralized Monocular Visual {SLAM}
+CNN-based Monocular Decentralized SLAM on embedded FPGA
 }
 
 
-\author{Jincheng Yu$^{1}$, Feng Gao$^{1}$, Chao Yu$^{1}$, Lu Tian$^{2}$, Jianfei Cao$^{3}$, Zhaoliang Zhang$^{1}$, \\ Zhengfeng Huang$^{3}$, Yu Wang$^{1}$ and Huazhong Yang$^{1}$ % <-this % stops a space
+\author{Jincheng Yu$^{1}$, Feng Gao$^{1}$, Jianfei Cao$^{3}$, Chao Yu$^{1}$, Zhaoliang Zhang$^{1}$, Lu Tian$^{2}$, \\ Zhengfeng Huang$^{3}$, Yu Wang$^{1}$ and Huazhong Yang$^{1}$ % <-this % stops a space
 % \thanks{*This work was not supported by any organization} % <-this % stops a space
 \thanks{$^{1}$Electronic Engineering Department,
         Tsinghua University, Beijing, China
         {\tt\small yjc16@mails.tsinghua.edu.cn, yu-wang@tsinghua.edu.cn}}%
 \thanks{$^{2}$ Xilinx,Inc.(Beijing), Beijing, China}%
-\thanks{$^{3}$School of Microelectronics
-Hefei University of Technology
-Hefei,China}%
+\thanks{$^{3}$School of Microelectronics,
+Hefei University of Technology,
+Hefei, China}%
 }
 
 
@@ -88,8 +93,8 @@ Hefei,China}%
 \input{src/conclusion.tex}
 
 
-\section*{Acknowledgment}
-\input{src/acknowledgment.tex}
+% \section*{Acknowledgment}
+% \input{src/acknowledgment.tex}
 
 
 \bibliographystyle{IEEEtran}
